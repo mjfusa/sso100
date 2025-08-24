@@ -1,0 +1,258 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Microsoft Graph API",
+    "version": "v1.0",
+    "description": "API to obtain message center messages including OAuth authentication"
+  },
+  "servers": [
+    {
+      "url": "https://sx9lvcg1-3000.usw2.devtunnels.ms"
+    }
+  ],
+  "paths": {
+    "/admin/serviceAnnouncement/messages": {
+      "get": {
+        "summary": "Get message center messages",
+        "description": "Retrieve the message center messages",
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Total number of records returned",
+            "required": true,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "Specifies the maximum number of items to return in a result set",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "odata.maxpagesize=10"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Number of records to return",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Number of records to skip",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter the results based on specific conditions. Use `contains(title,'search term')` to search within the title property for a specific term. For create time, use the 'startDateTime' property with a date format. For example, `startDateTime ge 2025-03-01T00:00:00Z` to filter messages created after March 1, 2025. For major change messages, use `isMajorChange eq true`. To combine filters, use `and` operator. For example, `contains(title,'Copilot') and startDateTime ge 2025-03-01T00:00:00Z`. Searches should be in lowercase. For example, `contains(tolower(title),tolower('microsoft 365'))`. For the 'Tags' field, here is an example of the a query segment for the tags field: tags/any(t: t eq 'New feature'). For the 'Services' field, here is an example of a query segment for the services field: services/any(s: s eq 'Microsoft Teams'). Note that the 'Services' and 'Tags' fields are arrays, so you can use `any` to check if any element matches the condition. For the 'category' field, you can filter by category using `category eq 'stayInformed'` or `category eq 'planForChange'` or `category eq 'preventOrFixIssue'`. For the 'severity' field, you can filter by severity using `severity eq 'normal'` or `severity eq 'high'` or `severity eq 'critical'`.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "example1": {
+                "value": "contains(tolower(title),tolower('Microsoft 365'))",
+                "description": "Case insensitive search for messages containing 'Microsoft 365' in the title."
+              },
+              "example2": {
+                "value": "contains(tolower(body.content), tolower('agents'))",
+                "description": "Case insensitive filter for messages with 'agents' in the body."
+              },
+              "example3": {
+                "value": "isMajorChange eq true",
+                "description": "Filter for major change messages."
+              },
+              "example4": {
+                "value": "tags/any(x:x eq 'New feature') and contains(tolower(title), tolower('Microsoft Teams'))",
+                "description": "Filter for messages tagged as 'New Feature' and messages regarding Microsoft Teams."
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@odata.context": {
+                      "type": "string",
+                      "description": "Context URL for the response data"
+                    },
+                    "@odata.count": {
+                      "type": "integer",
+                      "description": "Total number of records returned"
+                    },
+                    "value": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "body": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string",
+                            "enum": [
+                              "stayInformed",
+                              "planForChange",
+                              "preventOrFixIssue"
+                            ]
+                          },
+                          "severity": {
+                            "type": "string",
+                            "enum": [
+                              "normal",
+                              "high",
+                              "critical"
+                            ]
+                          },
+                          "startDateTime": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "lastModifiedDateTime": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isMajorChange": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions. You need the Message Center Reader or the Global Admin role to access this agent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Please check your authentication credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "openid",
+              "profile",
+              "offline_access",
+              "https://graph.microsoft.com/ServiceMessage.Read.All",
+              "api://ab1814f4-c848-4582-9733-9be230a383ac/access_as_user"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://sx9lvcg1-3000.usw2.devtunnels.ms/auth/start",
+            "tokenUrl": "https://sx9lvcg1-3000.usw2.devtunnels.ms/auth/token",
+            "refreshUrl": "https://sx9lvcg1-3000.usw2.devtunnels.ms/auth/token",
+            "scopes": {
+              "openid": "Sign in with OpenID Connect",
+              "profile": "Access basic profile info",
+              "offline_access": "Request refresh token",
+              "https://graph.microsoft.com/ServiceMessage.Read.All": "Read message center messages",
+              "api://ab1814f4-c848-4582-9733-9be230a383ac/access_as_user": "Call backend API as the signed-in user"
+            }
+          }
+        }
+      }
+    }
+  }
+}
