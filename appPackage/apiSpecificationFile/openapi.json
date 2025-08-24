@@ -227,7 +227,7 @@
               "profile",
               "offline_access",
               "https://graph.microsoft.com/ServiceMessage.Read.All",
-              "api://ab1814f4-c848-4582-9733-9be230a383ac/access_as_user"
+              "api://2865e4dd-5cfc-4f58-bd66-500eecd4cf9a/access_as_user"
             ]
           }
         ]
@@ -248,7 +248,7 @@
               "profile": "Access basic profile info",
               "offline_access": "Request refresh token",
               "https://graph.microsoft.com/ServiceMessage.Read.All": "Read message center messages",
-              "api://ab1814f4-c848-4582-9733-9be230a383ac/access_as_user": "Call backend API as the signed-in user"
+              "api://2865e4dd-5cfc-4f58-bd66-500eecd4cf9a/access_as_user": "Call backend API as the signed-in user"
             }
           }
         }

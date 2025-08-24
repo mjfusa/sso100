@@ -14,7 +14,7 @@ const REDIRECT_URI = process.env.REDIRECT_URI || `https://sx9lvcg1-3000.usw2.dev
 
 // Scopes: separate code-flow (backend API) scopes and Graph scopes.
 // CODE_SCOPES are used when initiating interactive auth (must be a single resource + openid/offline_access)
-const BACKEND_SCOPE = process.env.BACKEND_SCOPE || `api://auth-71e5173f-60c6-41aa-816d-76bc7582752a/ab1814f4-c848-4582-9733-9be230a383ac/access_as_user`;
+const BACKEND_SCOPE = process.env.BACKEND_SCOPE || `api://2865e4dd-5cfc-4f58-bd66-500eecd4cf9a/access_as_user`;
 const CODE_SCOPES = [BACKEND_SCOPE, 'openid', 'profile', 'offline_access'];
 const GRAPH_SCOPES = (process.env.GRAPH_SCOPES ? process.env.GRAPH_SCOPES.split(' ') : ['https://graph.microsoft.com/ServiceMessage.Read.All']);
 
